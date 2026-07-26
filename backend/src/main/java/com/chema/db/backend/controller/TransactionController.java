@@ -4,6 +4,7 @@ import com.chema.db.backend.model.Transaction;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.service.TransactionService;
 import com.chema.db.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +31,23 @@ public class TransactionController {
     public Transaction findById(@PathVariable Long id, @RequestParam String username) {
         User user = userService.findByUsername(username);
         return transactionService.findByIdForUser(id, user);
+    }
+
+    @PostMapping
+    public Transaction create(@Valid @RequestBody Transaction transaction, @RequestParam Long categoryId , @RequestParam String username) {
+        User user = userService.findByUsername(username);
+        return transactionService.createForUser(transaction, categoryId, user);
+    }
+
+    @PutMapping("/{id}")
+    public Transaction update(@PathVariable Long id, @Valid @RequestBody Transaction updated, @RequestParam Long categoryId, @RequestParam String username) {
+        User user = userService.findByUsername(username);
+        return transactionService.updateForUser(id, updated, categoryId, user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id, @RequestParam String username) {
+        User user = userService.findByUsername(username);
+        transactionService.deleteForUser(id, user);
     }
 }
