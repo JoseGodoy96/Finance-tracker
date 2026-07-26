@@ -4,10 +4,7 @@ import com.chema.db.backend.model.Transaction;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.service.TransactionService;
 import com.chema.db.backend.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +24,11 @@ public class TransactionController {
     public List<Transaction> findAll(@RequestParam String username) {
         User user = userService.findByUsername(username);
         return transactionService.findAllForUser(user);
+    }
+
+    @GetMapping("/{id}")
+    public Transaction findById(@PathVariable Long id, @RequestParam String username) {
+        User user = userService.findByUsername(username);
+        return transactionService.findByIdForUser(id, user);
     }
 }
