@@ -2,6 +2,8 @@ package com.chema.db.backend.controller;
 
 import com.chema.db.backend.dto.AuthRequest;
 import com.chema.db.backend.dto.AuthResponse;
+import com.chema.db.backend.dto.RegisterRequest;
+import com.chema.db.backend.dto.UserResponse;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.service.JwtService;
 import com.chema.db.backend.service.UserService;
@@ -37,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@Valid @RequestBody User user) {
-        return userService.register(user);
+    public UserResponse register(@Valid @RequestBody RegisterRequest request) {
+        return userService.register(request);
     }
 }
