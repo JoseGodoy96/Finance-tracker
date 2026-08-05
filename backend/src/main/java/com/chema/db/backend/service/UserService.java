@@ -1,5 +1,7 @@
 package com.chema.db.backend.service;
 
+import com.chema.db.backend.dto.RegisterRequest;
+import com.chema.db.backend.dto.UserResponse;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,14 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User register(User user) {
+    public UserResponse register(RegisterRequest request) {
 
+        User user = UserMapper.toEntity(request);
         user.setPassword(
                 passwordEncoder.encode(user.getPassword())
         );
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return UserMapper.toResponse(savedUser);
     }
 
     public User findByUsername(String username) {
