@@ -1,5 +1,7 @@
 package com.chema.db.backend.controller;
 
+import com.chema.db.backend.dto.CategoryRequest;
+import com.chema.db.backend.dto.CategoryResponse;
 import com.chema.db.backend.model.Category;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.service.CategoryService;
@@ -20,13 +22,13 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> findAll(@AuthenticationPrincipal User user) {
+    public List<CategoryResponse> findAll(@AuthenticationPrincipal User user) {
         return categoryService.findAllForUser(user);
     }
 
     @PostMapping
-    public Category create(@Valid @RequestBody Category category, @AuthenticationPrincipal User user) {
-        return categoryService.createForUser(category, user);
+    public CategoryResponse create(@Valid @RequestBody CategoryRequest request, @AuthenticationPrincipal User user) {
+        return categoryService.createForUser(request, user);
     }
 
     @DeleteMapping("/{id}")
