@@ -1,5 +1,7 @@
 package com.chema.db.backend.service;
 
+import com.chema.db.backend.dto.CategoryRequest;
+import com.chema.db.backend.dto.CategoryResponse;
 import com.chema.db.backend.model.Category;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.repository.CategoryRepository;
@@ -18,16 +20,20 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> findAllForUser(User user) {
+    public List<CategoryResponse> findAllForUser(User user) {
         return Stream.concat(
                 categoryRepository.findByUserIsNull().stream(),
                 categoryRepository.findByUser(user).stream()
-        ).toList();
+                )
+                .map(CategoryMapper::toResponse)
+                .toList();
     }
 
-    public Category createForUser(Category category, User user) {
+    public CategoryResponse createForUser(CategoryRequest request, User user) {
+        Category category = CategoryMapper.toEntity(request);
         category.setUser(user);
-        return categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
+        return CategoryMapper.toResponse(savedCategory);
     }
 
     public void deleteForUser(Long id, User user) {
