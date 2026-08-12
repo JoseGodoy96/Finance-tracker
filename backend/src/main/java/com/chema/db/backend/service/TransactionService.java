@@ -1,5 +1,7 @@
 package com.chema.db.backend.service;
 
+import com.chema.db.backend.dto.TransactionRequest;
+import com.chema.db.backend.dto.TransactionResponse;
 import com.chema.db.backend.exception.ResourceNotFoundException;
 import com.chema.db.backend.model.Category;
 import com.chema.db.backend.model.Transaction;
@@ -9,6 +11,7 @@ import com.chema.db.backend.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class TransactionService {
@@ -21,11 +24,14 @@ public class TransactionService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Transaction> findAllForUser(User user) {
-        return transactionRepository.findByUser(user);
+    public List<TransactionResponse> findAllForUser(User user) {
+        return transactionRepository.findByUser(user)
+                .stream()
+                .map(TransactionMapper::toResponse)
+                .toList();
     }
 
-    public Transaction findByIdForUser(Long id, User user) {
+    public TransactionResponse findByIdForUser(Long id, User user) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", id));
 
@@ -33,10 +39,10 @@ public class TransactionService {
             throw new RuntimeException("You cannot access this transaction");
         }
 
-        return transaction;
+        return TransactionMapper.toResponse(transaction);
     }
 
-    public Transaction createForUser(Transaction transaction, Long categoryId, User user) {
+    public TransactionResponse createForUser(TransactionRequest request, Long categoryId, User user) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", categoryId));
 
@@ -44,12 +50,14 @@ public class TransactionService {
             throw new RuntimeException("You cannot use this category");
         }
 
+        Transaction transaction = TransactionMapper.toEntity(request);
         transaction.setUser(user);
         transaction.setCategory(category);
-        return transactionRepository.save(transaction);
+        Transaction savedTransaction = transactionRepository.save(transaction);
+        return TransactionMapper.toResponse(savedTransaction);
     }
 
-    public Transaction updateForUser(Long id, Transaction updated, Long categoryId, User user) {
+    public TransactionResponse updateForUser(Long id, Transaction updated, Long categoryId, User user) {
 
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", id));
