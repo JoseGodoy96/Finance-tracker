@@ -11,7 +11,6 @@ import com.chema.db.backend.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class TransactionService {
@@ -57,7 +56,7 @@ public class TransactionService {
         return TransactionMapper.toResponse(savedTransaction);
     }
 
-    public TransactionResponse updateForUser(Long id, Transaction updated, Long categoryId, User user) {
+    public TransactionResponse updateForUser(Long id, TransactionRequest request, Long categoryId, User user) {
 
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", id));
@@ -73,13 +72,13 @@ public class TransactionService {
             throw new RuntimeException("You cannot use this category");
         }
 
-        transaction.setAmount(updated.getAmount());
-        transaction.setDate(updated.getDate());
-        transaction.setDescription(updated.getDescription());
-        transaction.setType(updated.getType());
+        transaction.setAmount(request.getAmount());
+        transaction.setDate(request.getDate());
+        transaction.setDescription(request.getDescription());
+        transaction.setType(request.getType());
         transaction.setCategory(category);
-
-        return transactionRepository.save(transaction);
+        Transaction updatedTransaction = transactionRepository.save(transaction);
+        return TransactionMapper.toResponse(updatedTransaction);
     }
 
     public void deleteForUser(Long id, User user) {
