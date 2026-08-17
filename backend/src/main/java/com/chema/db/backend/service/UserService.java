@@ -2,6 +2,7 @@ package com.chema.db.backend.service;
 
 import com.chema.db.backend.dto.RegisterRequest;
 import com.chema.db.backend.dto.UserResponse;
+import com.chema.db.backend.exception.ResourceNotFoundException;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,6 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+                .orElseThrow(() -> new ResourceNotFoundException("User", username));
     }
 }

@@ -2,6 +2,7 @@ package com.chema.db.backend.service;
 
 import com.chema.db.backend.dto.CategoryRequest;
 import com.chema.db.backend.dto.CategoryResponse;
+import com.chema.db.backend.exception.ForbiddenAccessException;
 import com.chema.db.backend.model.Category;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.repository.CategoryRepository;
@@ -41,7 +42,7 @@ public class CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category", id));
 
         if (category.getUser() == null || !category.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You cannot delete this category");
+            throw new ForbiddenAccessException("You cannot delete this category");
         }
 
         categoryRepository.delete(category);

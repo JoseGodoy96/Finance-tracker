@@ -4,6 +4,7 @@ import com.chema.db.backend.dto.AuthRequest;
 import com.chema.db.backend.dto.AuthResponse;
 import com.chema.db.backend.dto.RegisterRequest;
 import com.chema.db.backend.dto.UserResponse;
+import com.chema.db.backend.exception.InvalidCredentialsException;
 import com.chema.db.backend.model.User;
 import com.chema.db.backend.service.JwtService;
 import com.chema.db.backend.service.UserService;
@@ -32,7 +33,7 @@ public class UserController {
     public AuthResponse login(@Valid @RequestBody AuthRequest request) {
         User user = userService.findByUsername(request.getUsername());
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
         String token = jwtService.generateToken(user.getUsername());
         return new AuthResponse(token);

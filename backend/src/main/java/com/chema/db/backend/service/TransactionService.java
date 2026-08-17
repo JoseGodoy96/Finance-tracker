@@ -2,6 +2,7 @@ package com.chema.db.backend.service;
 
 import com.chema.db.backend.dto.TransactionRequest;
 import com.chema.db.backend.dto.TransactionResponse;
+import com.chema.db.backend.exception.ForbiddenAccessException;
 import com.chema.db.backend.exception.ResourceNotFoundException;
 import com.chema.db.backend.model.Category;
 import com.chema.db.backend.model.Transaction;
@@ -35,7 +36,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", id));
 
         if (!transaction.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You cannot access this transaction");
+            throw new ForbiddenAccessException("You cannot access this transaction");
         }
 
         return TransactionMapper.toResponse(transaction);
@@ -46,7 +47,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category", categoryId));
 
         if (category.getUser() != null && !category.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You cannot use this category");
+            throw new ForbiddenAccessException("You cannot use this category");
         }
 
         Transaction transaction = TransactionMapper.toEntity(request);
@@ -62,14 +63,14 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", id));
 
         if (!transaction.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You cannot update this transaction");
+            throw new ForbiddenAccessException("You cannot update this transaction");
         }
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", categoryId));
 
         if (category.getUser() != null && !category.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You cannot use this category");
+            throw new ForbiddenAccessException("You cannot use this category");
         }
 
         transaction.setAmount(request.getAmount());
@@ -86,7 +87,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", id));
 
         if (transaction.getUser() == null || !transaction.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You cannot delete this transaction");
+            throw new ForbiddenAccessException("You cannot delete this transaction");
         }
         transactionRepository.delete(transaction);
     }
