@@ -27,10 +27,12 @@ public class CategorySuggestionService {
             targetCategoryName = fallbackKeywords(description);
         }
 
+        final String finalName = targetCategoryName;
+
         Category category = categoryRepository.findByUserIsNull().stream()
-                .filter(c -> c.getName().equalsIgnoreCase(targetCategoryName))
+                .filter(c -> c.getName().equalsIgnoreCase(finalName))
                 .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Category", targetCategoryName));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", finalName));
 
         return CategoryMapper.toResponse(category);
     }
