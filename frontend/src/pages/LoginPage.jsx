@@ -17,7 +17,7 @@ function LoginPage() {
 			localStorage.setItem('token', data.token);
 			navigate('/dashboard');
 		} catch (err) {
-			setError('Usuario o contraseña incorrecta');
+			setError('Usuario o contraseña incorrecta' + err);
 		}
 	}
 
