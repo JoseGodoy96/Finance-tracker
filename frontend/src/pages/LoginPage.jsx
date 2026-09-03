@@ -50,7 +50,6 @@ function LoginPage() {
                 ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
             </p>
         </div>
-
 	);
 }
 
