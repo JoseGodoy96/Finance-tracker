@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './components/PrivateRoute';
+import CategoriesPage from './pages/CategoriesPage';
 
 function App() {
 	return (
@@ -13,6 +14,11 @@ function App() {
 				<Route path="/dashboard" element={
 					<PrivateRoute>
 						<div>Dashboard (todavia por hacer)</div>
+					</PrivateRoute>
+					} />
+				<Route path="/categories" element={
+					<PrivateRoute>
+						<CategoriesPage />
 					</PrivateRoute>
 					} />
 				<Route path="*" element={<div>404 - Página no encontrada</div>} />
