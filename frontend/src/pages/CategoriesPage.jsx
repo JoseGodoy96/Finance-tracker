@@ -25,7 +25,6 @@ function CategoriesPage() {
 		} catch (err) {
 			alert('No se pudo crear la categoria' + err);
 		}
-		
 	}
 
 	async function handleDelete(id) {
