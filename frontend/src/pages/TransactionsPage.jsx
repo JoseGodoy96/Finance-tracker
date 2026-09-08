@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getCategories } from "../api/categories";
 import { getTransactions, createTransaction, updateTransaction, deleteTransaction } from "../api/transactions";
+import { suggestCategory } from "../api/ai/ai";
 
 function TransactionsPage() {
 	const [transactions, setTransactions] = useState([]);
@@ -24,6 +25,22 @@ function TransactionsPage() {
 		loadTransactions();
 		loadCategories();
 	}, [])
+
+	useEffect(() => {
+
+		if (description.trim().length < 3)
+			return;
+		const timeoutId = setTimeout(async () => {
+			try {
+				const suggested = await suggestCategory(description);
+				setCategoryId(suggested.id);
+				setType(suggested.type);
+			} catch (err) {
+				
+			}
+		}, 800);
+		return () => clearTimeout(timeoutId);
+	}, [description]);
 
 	async function handleSubmit(e) {
 		e.preventDefault();
