@@ -10,6 +10,7 @@ function TransactionsPage() {
 	const [description, setDescription] = useState('');
 	const [type, setType] = useState('EXPENSE');
 	const [categoryId, setCategoryId] = useState('');
+	const [editingId, setEditingId] = useState(null);
 
 	useEffect(() => {
 		async function loadTransactions() {
@@ -27,23 +28,53 @@ function TransactionsPage() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 
+
+		const transaction = {
+			amount: parseFloat(amount),
+			date,
+			description,
+			type,
+		};
+
 		try {
-			const transaction = {
-				amount: parseFloat(amount),
-				date,
-				description,
-				type,
-			};
-			const data = await createTransaction(transaction, categoryId);
-			setTransactions([...transactions, data]);
+			if (editingId === null) {
+				const data = await createTransaction(transaction, categoryId);
+				setTransactions([...transactions, data]);
+			} else {
+				const data = await updateTransaction(editingId, transaction, categoryId);
+				setTransactions(transactions.map(t => {
+					if (t.id === editingId) return data;
+					return t;
+				}));
+			}
 			setAmount('');
 			setDate('');
 			setDescription('');
 			setType('EXPENSE');
 			setCategoryId('');
+			setEditingId(null);
 		} catch (err) {
 			alert('No se pudo crear la Transaction' + err);
 		}
+	}
+
+	async function handleDelete(id) {
+
+		try {
+			await deleteTransaction(id);
+			setTransactions(transactions.filter(c => c.id !== id));
+		} catch (err) {
+			alert('No se pudo borrar la transaccion' + err);
+		}
+	}
+
+	function handleEdit(t) {
+		setEditingId(t.id);
+		setAmount(t.amount);
+		setDate(t.date);
+		setDescription(t.description);
+		setType(t.type);
+		setCategoryId(t.categoryId);
 	}
 
 	return (
@@ -94,6 +125,8 @@ function TransactionsPage() {
 					<li key={t.id}>
 						{t.date} - {t.amount} - {t.description}
 						<small> ({t.type} / {t.categoryName}) </small>
+						<button onClick={() => handleDelete(t.id)}>Eliminar</button>
+						<button onClick={() => handleEdit(t)}>Editar</button>
 					</li>
 				))}
 			</ul>
