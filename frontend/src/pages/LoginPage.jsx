@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../api/auth';
+import styles from './LoginPage.module.css';
 
 function LoginPage() {
 	const [username, setUsername] = useState('');
@@ -22,33 +23,37 @@ function LoginPage() {
 	}
 
 	return (
-		<div style={{ maxWidth: 400, margin: '2rem auto', padding: '1rem' }}>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Usuario:</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Contraseña:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">Entrar</button>
-            </form>
-            <p>
-                ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-            </p>
+		<div className={styles.container}>
+			<div className={styles.card}>
+				<h1 className={styles.title}>Login</h1>
+				<form onSubmit={handleSubmit} className={styles.form}>
+					<div className={styles.field}>
+						<label className={styles.label}>Usuario:</label>
+						<input
+							className={styles.input}
+							type="text"
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
+							required
+						/>
+					</div>
+					<div className={styles.field}>
+						<label className={styles.label}>Contraseña:</label>
+						<input
+							className={styles.input}
+							type="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							required
+						/>
+					</div>
+					{error && <p className={styles.error}>{error}</p>}
+					<button type="submit" className={styles.button}>Entrar</button>
+				</form>
+				<p className={styles.link}>
+					¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+				</p>
+			</div>
         </div>
 	);
 }
