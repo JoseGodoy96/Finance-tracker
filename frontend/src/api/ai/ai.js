@@ -1,4 +1,4 @@
-import { apiFetch } from "./http"
+import { apiFetch } from "../http"
 
 export const suggestCategory = async(description) => {
 
