@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getCategories, createCategory, deleteCategory } from "../api/categories";
+import styles from "../styles/CategoriesPage.module.css"
 
 function CategoriesPage() {
 	const [categories, setCategories] = useState([]);
@@ -38,50 +39,55 @@ function CategoriesPage() {
 	}
 
 	return (
-		<div style={{ maxWidth: 600, margin: '2rem auto', padding: '1rem' }}>
-			<h1>Categories</h1>
-
-			<form onSubmit={handleSubmit}>
-				<input 
-				type="text"
-				value={name}
-				onChange={(e) => setName(e.target.value)}
-				required
-				/>
-				<select 
-				value={type}
-				onChange={(e) => setType(e.target.value)}
-				>
-					<option value="INCOME">INCOME</option>
-					<option value="EXPENSE">EXPENSE</option>
-				</select>
-				<button type="submit">Crear</button>
-			</form>
-
-			<h2>Del sistema</h2>
-			<ul>
-				{categories
-					.filter(c => c.system)
-					.map(c => (
-						<li key={c.id}>
-							{c.name} <small>({c.type})</small>
-						</li>
-					))
-				}
-			</ul>
-
-			<h2>Mis categorias</h2>
-			<ul>
-				{categories
-					.filter(c => !c.system)
-					.map(c => (
-						<li key={c.id}>
-							{c.name} <small>({c.type})</small>
-							<button onClick={() => handleDelete(c.id)}>Eliminar</button>
-						</li>
-					))
-				}
-			</ul>
+		<div className={styles.page}>
+			<h1 className={styles.heading}>Categories</h1>
+			<div className={styles.card}>
+				<form onSubmit={handleSubmit} className={styles.form}>
+					<input
+					className={styles.input}
+					type="text"
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					required
+					/>
+					<select
+					className={styles.select}
+					value={type}
+					onChange={(e) => setType(e.target.value)}
+					>
+						<option value="INCOME">INCOME</option>
+						<option value="EXPENSE">EXPENSE</option>
+					</select>
+					<button type="submit" className={styles.button}>Crear</button>
+				</form>
+			</div>
+			<div className={styles.section}>
+				<h2 className={styles.sectionTitle}>Del sistema</h2>
+				<ul className={styles.list}>
+					{categories
+						.filter(c => c.system)
+						.map(c => (
+							<li key={c.id} className={styles.item}>
+								{c.name} <small className={styles.itemType}>({c.type})</small>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+			<div className={styles.section}>
+				<h2 className={styles.sectionTitle}>Mis categorias</h2>
+				<ul className={styles.list}>
+					{categories
+						.filter(c => !c.system)
+						.map(c => (
+							<li key={c.id} className={styles.item}>
+								{c.name} <small className={styles.button}>({c.type})</small>
+								<button onClick={() => handleDelete(c.id)} className={styles.deleteBtn}>Eliminar</button>
+							</li>
+						))
+					}
+				</ul>
+			</div>
 		</div>
 	);
 }
