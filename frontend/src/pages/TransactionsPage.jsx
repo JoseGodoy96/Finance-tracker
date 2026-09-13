@@ -3,7 +3,7 @@ import { getCategories } from "../api/categories";
 import { getTransactions, createTransaction, updateTransaction, deleteTransaction } from "../api/transactions";
 import { suggestCategory } from "../api/ai/ai";
 import styles from "../styles/TransactionsPage.module.css"
-
+import Navbar from "../components/Navbar";
 
 function TransactionsPage() {
 	const [transactions, setTransactions] = useState([]);
@@ -99,6 +99,7 @@ function TransactionsPage() {
 	return (
 		<div className={styles.page}>
 			<h1 className={styles.heading}>Transactions</h1>
+			<Navbar />
 			<div className={styles.card}>
 				<form onSubmit={handleSubmit} className={styles.form}>
 					<input 

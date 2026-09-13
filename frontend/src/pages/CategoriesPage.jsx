@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getCategories, createCategory, deleteCategory } from "../api/categories";
 import styles from "../styles/CategoriesPage.module.css"
+import Navbar from "../components/Navbar";
 
 function CategoriesPage() {
 	const [categories, setCategories] = useState([]);
@@ -41,6 +42,7 @@ function CategoriesPage() {
 	return (
 		<div className={styles.page}>
 			<h1 className={styles.heading}>Categories</h1>
+			<Navbar />
 			<div className={styles.card}>
 				<form onSubmit={handleSubmit} className={styles.form}>
 					<input

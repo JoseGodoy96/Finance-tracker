@@ -1,6 +1,6 @@
 .navbar {
 	max-width: 900px;
-	margin: 2rem auto 0;
+	margin: 2rem auto 2rem;
 	padding: 0.75rem 1.5rem;
 	background: rgba(255, 255, 255, 0.95);
 	border-radius: 12px;
@@ -42,5 +42,5 @@
 }
 
 .logout:hover {
-	background: #b91c1c;
+	background: #b91;
 }

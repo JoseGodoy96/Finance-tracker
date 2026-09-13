@@ -4,6 +4,7 @@ import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './components/PrivateRoute';
 import CategoriesPage from './pages/CategoriesPage';
 import TransactionsPage from './pages/TransactionsPage';
+import Navbar from "./components/Navbar";
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 				<Route path="/register" element={<RegisterPage />} />
 				<Route path="/dashboard" element={
 					<PrivateRoute>
+						<Navbar />
 						<div>Dashboard (todavia por hacer)</div>
 					</PrivateRoute>
 					} />
