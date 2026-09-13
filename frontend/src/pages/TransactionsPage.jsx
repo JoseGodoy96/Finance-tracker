@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { getCategories } from "../api/categories";
 import { getTransactions, createTransaction, updateTransaction, deleteTransaction } from "../api/transactions";
 import { suggestCategory } from "../api/ai/ai";
+import styles from "../styles/TransactionsPage.module.css"
+
 
 function TransactionsPage() {
 	const [transactions, setTransactions] = useState([]);
@@ -95,58 +97,74 @@ function TransactionsPage() {
 	}
 
 	return (
-		<div style={{ maxWidth: 600, margin: '2rem auto', padding: '1rem'}}>
-			<h1>Transactions</h1>
-
-			<form onSubmit={handleSubmit}>
-				<input 
-					type="number"
-					step="0.01"
-					value={amount}
-					onChange={(e) => setAmount(e.target.value)}
-					required/>
-				<input 
-					type="date"
-					value={date}
-					onChange={(e) => setDate(e.target.value)}
-					required/>
-				<input 
-					type="text" 
-					value={description}
-					onChange={(e) => setDescription(e.target.value)}
-					required/>
-				<select 
-					value={type}
-					onChange={(e) => setType(e.target.value)}
-					>
-					<option value="INCOME">INCOME</option>
-					<option value="EXPENSE">EXPENSE</option>
-				</select>
-				<select
-					value={categoryId}
-					onChange={(e) => setCategoryId(e.target.value)}
-					required
-					>
-					<option value="">-- Elige categoría --</option>
-					{categories.map(c => (
-						<option key={c.id} value={c.id}>
-							{c.name} ({c.type})
-						</option>
+		<div className={styles.page}>
+			<h1 className={styles.heading}>Transactions</h1>
+			<div className={styles.card}>
+				<form onSubmit={handleSubmit} className={styles.form}>
+					<input 
+						className={styles.input}
+						type="number"
+						step="0.01"
+						value={amount}
+						onChange={(e) => setAmount(e.target.value)}
+						required/>
+					<input
+						className={styles.input}
+						type="date"
+						value={date}
+						onChange={(e) => setDate(e.target.value)}
+						required/>
+					<input
+						className={styles.input}
+						type="text" 
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+						required/>
+					<select
+						className={styles.select}
+						value={type}
+						onChange={(e) => setType(e.target.value)}
+						>
+						<option value="INCOME">INCOME</option>
+						<option value="EXPENSE">EXPENSE</option>
+					</select>
+					<select
+						className={styles.select}
+						value={categoryId}
+						onChange={(e) => setCategoryId(e.target.value)}
+						required
+						>
+						<option value="">-- Elige categoría --</option>
+						{categories.map(c => (
+							<option key={c.id} value={c.id}>
+								{c.name} ({c.type})
+							</option>
+						))}
+					</select>
+					<button type="submit" className={styles.button}>Crear</button>
+				</form>
+			</div>
+			<div className={styles.section}>
+				<h2 className={styles.sectionTitle}>Tus transacciones</h2>
+				<ul className={styles.list}>
+					{transactions.map(t => (
+						<li key={t.id} className={styles.item}>
+							<div className={styles.itemInfo}>
+								<span className={styles.itemMain}>
+									{t.date} - {t.amount} - {t.description}
+								</span>
+								<small className={styles.itemMeta}>
+									({t.type} / {t.categoryName}) 
+								</small>
+							</div>
+							<div className={styles.actions}>
+								<button onClick={() => handleDelete(t.id)} className={styles.deleteBtn}>Eliminar</button>
+								<button onClick={() => handleEdit(t)} className={styles.editBtn}>Editar</button>
+							</div>
+						</li>
 					))}
-				</select>
-				<button type="submit">Crear</button>
-			</form>
-
-			<ul>
-				{transactions.map(t => (
-					<li key={t.id}>
-						{t.date} - {t.amount} - {t.description}
-						<small> ({t.type} / {t.categoryName}) </small>
-						<button onClick={() => handleDelete(t.id)}>Eliminar</button>
-						<button onClick={() => handleEdit(t)}>Editar</button>
-					</li>
-				))}
-			</ul>
+				</ul>
+			</div>
 		</div>
 	);
 }
